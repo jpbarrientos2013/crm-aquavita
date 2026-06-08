@@ -54,8 +54,10 @@ const LOGO_B64   = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAAGoCAIAAA
 
 // ── Apps Script API helpers ────────────────────────────────────────────────
 async function scriptGet() {
-  // GET directo — Apps Script responde JSON sin preflight
-  const r = await fetch(SCRIPT_URL, { redirect: "follow" });
+  const r = await fetch(SCRIPT_URL, {
+    method: "GET",
+    cache: "no-cache",
+  });
   if (!r.ok) throw new Error("HTTP " + r.status);
   const json = await r.json();
   if (!json.ok) throw new Error(json.error || "Error del servidor");
@@ -63,14 +65,12 @@ async function scriptGet() {
 }
 
 async function scriptPost(payload) {
-  // POST como form-urlencoded con el JSON dentro de "payload"
-  // Esto evita el bloqueo CORS de Google Apps Script con Content-Type JSON
   const body = "payload=" + encodeURIComponent(JSON.stringify(payload));
   const r = await fetch(SCRIPT_URL, {
     method: "POST",
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
     body: body,
-    redirect: "follow",
+    cache: "no-cache",
   });
   if (!r.ok) throw new Error("HTTP " + r.status);
   const json = await r.json();

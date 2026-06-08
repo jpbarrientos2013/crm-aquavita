@@ -54,10 +54,7 @@ const LOGO_B64   = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAAGoCAIAAA
 
 // ── Apps Script API helpers ────────────────────────────────────────────────
 async function scriptGet() {
-  const r = await fetch(SCRIPT_URL, {
-    method: "GET",
-    cache: "no-cache",
-  });
+  const r = await fetch(SCRIPT_URL);
   if (!r.ok) throw new Error("HTTP " + r.status);
   const json = await r.json();
   if (!json.ok) throw new Error(json.error || "Error del servidor");
@@ -70,7 +67,6 @@ async function scriptPost(payload) {
     method: "POST",
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
     body: body,
-    cache: "no-cache",
   });
   if (!r.ok) throw new Error("HTTP " + r.status);
   const json = await r.json();
